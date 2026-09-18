@@ -142,19 +142,19 @@ object AdManager {
 
     fun showInterstitial(
         activity: Activity,
-        onSucces: () -> Unit = {},
+        onSuccess: () -> Unit = {},
         onFailed: (String) -> Unit = {}
     ) {
 
         if (isPremium) {
-            onSucces()
+            onSuccess()
             return
         }
         if (!isAdsTime { onFailed(it) }) return
         interstitialAd?.let { ad ->
             ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
-                    onSucces()
+                    onSuccess()
                     lastInterstitialAd = System.currentTimeMillis()
                     interstitialAd = null
                     preloadInterstitial(activity)
