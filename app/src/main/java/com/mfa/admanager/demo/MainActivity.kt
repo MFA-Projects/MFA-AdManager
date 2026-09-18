@@ -176,7 +176,7 @@ private fun AdManagerDemoScreen() {
                     statusMessage = "Interstitial test triggered."
                     adManager.showInterstitial(
                         activity = activity?: context as Activity,
-                        onSucces = {
+                        onSuccess = {
                             statusMessage = "Interstitial test completed."
                         },
                         onFailed = {

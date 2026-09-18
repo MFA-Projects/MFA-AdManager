@@ -1,5 +1,7 @@
 # MFA AdManager
 
+[![](https://www.jitpack.io/v/MFA-Projects/MFA-AdManager.svg)](https://www.jitpack.io/#MFA-Projects/MFA-AdManager)
+
 A simple Android library for managing Google AdMob ads with a centralized `AdManager`.
 
 MFA AdManager provides a simple API for Banner, Interstitial, and Rewarded Ads while handling test ad unit IDs automatically in debug builds.
@@ -25,9 +27,34 @@ MFA AdManager provides a simple API for Banner, Interstitial, and Rewarded Ads w
 
 ## Installation
 
-**Coming soon.**
+MFA AdManager is available through JitPack.
 
-The library will be available through a Maven repository.
+### 1. Add JitPack repository
+
+In your `settings.gradle.kts`:
+
+```kotlin
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+```
+
+### 2. Add the dependency
+
+In your app's `build.gradle.kts`:
+
+```kotlin
+dependencies {
+    implementation("com.github.MFA-Projects:MFA-AdManager:1.0.1")
+}
+```
+That's it.
+
 
 ## Basic Usage
 
