@@ -37,6 +37,7 @@ android {
 
 dependencies {
     implementation(project(":library"))
+//    implementation("com.github.MFA-Projects:MFA-AdManager:1.0.1")
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
