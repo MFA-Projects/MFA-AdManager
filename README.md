@@ -54,7 +54,7 @@ In your app module's `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("com.github.MFA-Projects:MFA-AdManager:1.0.1")
+    implementation("com.github.MFA-Projects:MFA-AdMob:1.0.1")
 }
 ```
 
@@ -83,7 +83,7 @@ class MyApplication : Application() {
             minDelay = 5,
             isPremium = false
         ) {
-            // AdManager initialization completed.
+            // AdMob initialization completed.
         }
     }
 }

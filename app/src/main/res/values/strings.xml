@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">MFA AdManager</string>
-    <string name="sample_admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_app_id">ca-app-pub-2653594346856896~8236029220</string>
+    <string name="admob_banner_id">ca-app-pub-2653594346856896/2572639007</string>
+    <string name="admob_interstitial_id">ca-app-pub-2653594346856896/5334533716</string>
+    <string name="admob_rewarded_id">ca-app-pub-2653594346856896/5239038632</string>
+    <string name="admob_banner_id_bidding">ca-app-pub-2653594346856896/3662233085</string>
+    <string name="admob_interstitial_id_bidding">ca-app-pub-2653594346856896/4109081954</string>
+    <string name="admob_rewarded_id_bidding">ca-app-pub-2653594346856896/7497662625</string>
+    <string name="unity_game_id">800448733</string>
+    <string name="unity_banner_id">BP_Banner_Android</string>
+    <string name="unity_interstitial_id">BP_Interstitial_Android</string>
+    <string name="unity_reward_id">BP_Rewarded_Android</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.mfa.admanager
+package com.mfa.admanager.admob
 
 import android.app.Activity
 import android.content.Context
@@ -21,9 +21,9 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
 import java.util.concurrent.ConcurrentHashMap
 
-object AdManager {
+object AdMob {
 
-    private const val TAG = "AdManager"
+    private const val TAG = "AdMob"
 
     private const val BANNER_AD_UNIT_TESTER_ID =
         "ca-app-pub-3940256099942544/9214589741"
@@ -47,9 +47,7 @@ object AdManager {
      * Minimum interval between ads using the same cooldown key.
      */
     sealed class Cooldown {
-
         data object Disabled : Cooldown()
-
         data class Enabled(
             val durationMillis: Long
         ) : Cooldown() {
@@ -352,7 +350,7 @@ object AdManager {
 
     private fun ensureInitialized(): Boolean {
         if (!isInitialized) {
-            Log.e(TAG, "AdManager has not been initialized.")
+            Log.e(TAG, "AdMob has not been initialized.")
             return false
         }
 
@@ -461,7 +459,7 @@ object AdManager {
         cooldownKey: String = DEFAULT_INTERSTITIAL_PLACEMENT
     ) {
         if (!ensureInitialized()) {
-            onFailed("AdManager has not been initialized.")
+            onFailed("AdMob has not been initialized.")
             return
         }
 

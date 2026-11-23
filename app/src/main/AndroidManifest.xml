@@ -25,7 +25,7 @@
         <!-- replace "@string/sample_admob_app_id" with your app id-->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/sample_admob_app_id"/>
+            android:value="@string/admob_app_id"/>
 
     </application>
 

@@ -26,4 +26,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "MFA_AdManager"
 include(":app")
-include(":library")
+include(":Admob")
+include(":Unity")

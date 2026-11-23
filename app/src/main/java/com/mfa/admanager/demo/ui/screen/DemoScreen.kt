@@ -51,13 +51,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdView
-import com.mfa.admanager.AdManager
+import com.mfa.admanager.admob.AdMob
+import com.mfa.admanager.demo.R
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val INTERSTITIAL_COOLDOWN_KEY = "demo_interstitial"
 private const val REWARDED_COOLDOWN_KEY = "demo_rewarded"
@@ -70,10 +73,10 @@ private enum class DemoCooldown(
     ONE_MINUTE("1 min", 60_000L),
     FIVE_MINUTES("5 min", 5 * 60_000L);
 
-    fun toPolicy(): AdManager.Cooldown {
+    fun toPolicy(): AdMob.Cooldown {
         return durationMillis?.let {
-            AdManager.Cooldown.Enabled(it)
-        } ?: AdManager.Cooldown.Disabled
+            AdMob.Cooldown.Enabled(it)
+        } ?: AdMob.Cooldown.Disabled
     }
 }
 
@@ -82,6 +85,16 @@ private enum class DemoCooldown(
 fun AdManagerDemoScreen() {
     val context = LocalContext.current
     val activity = remember(context) { context.findActivity() }
+    val unityGameId = stringResource(R.string.unity_game_id)
+    val unityBannerId = stringResource(R.string.unity_banner_id)
+    val unityInterstitialId = stringResource(R.string.unity_interstitial_id)
+    val unityRewardedId = stringResource(R.string.unity_reward_id)
+    val admobBannerIdBidding = stringResource(R.string.admob_banner_id_bidding)
+    val admobInterstitialIdBidding = stringResource(R.string.admob_interstitial_id_bidding)
+    val admobRewardedIdBidding = stringResource(R.string.admob_rewarded_id_bidding)
+    val admobBannerId = stringResource(R.string.admob_banner_id)
+    val admobInterstitialId = stringResource(R.string.admob_interstitial_id)
+    val admobRewardedId = stringResource(R.string.admob_rewarded_id)
 
     var isPremium by remember { mutableStateOf(false) }
     var isInitialized by remember { mutableStateOf(false) }
@@ -109,39 +122,76 @@ fun AdManagerDemoScreen() {
     // Initialize the manager once. Do not reinitialize it every
     // time the Premium simulation switch changes.
     LaunchedEffect(context) {
-        AdManager.setCooldown(
+        AdMob.setCooldown(
             key = INTERSTITIAL_COOLDOWN_KEY,
             cooldown = interstitialCooldown.toPolicy()
         )
 
-        AdManager.setCooldown(
+        AdMob.setCooldown(
             key = REWARDED_COOLDOWN_KEY,
             cooldown = rewardedCooldown.toPolicy()
         )
 
-        AdManager.initialize(
+        AdMob.initialize(
             context = context.applicationContext,
-            bannerAdUnitId = "ca-app-pub-your-banner-ad-unit-id",
-            interstitialAdUnitId = "ca-app-pub-your-interstitial-ad-unit-id",
-            rewardedAdUnitId = "ca-app-pub-your-rewarded-ad-unit-id",
+//            gameId = unityGameId,
+            bannerAdUnitId = admobBannerId,
+            interstitialAdUnitId = admobInterstitialId,
+            rewardedAdUnitId = admobRewardedId,
             minDelay = 0L,
             isPremium = false
         ) {
             isInitialized = true
-            statusMessage = "MFA-AdManager initialized successfully."
+            statusMessage = "MFA-AdMob initialized successfully."
         }
+
+
+//        AdMob.initialize(
+//            context = context.applicationContext,
+//            gameId = "800448733",
+//            isPremium = false,
+//            onInitialized = {
+//                AdMob.loadInterstitial(
+//                    placementId = "BP_Interstitial_Android",
+//                    onLoaded = {
+//                        AdMob.showInterstitial(
+//                            activity = activity!!,
+//                            placementId = "BP_Interstitial_Android",
+//                            cooldownKey = INTERSTITIAL_COOLDOWN_KEY,
+//                            onSuccess = {
+//                                Toast.makeText(context, "Interstitial shown", Toast.LENGTH_SHORT).show()
+//                                Log.d("AdMobAds", "Interstitial shown")
+//
+//                            },
+//                            onFailed = { error ->
+//                                Toast.makeText(context, "Interstitial failed: $error", Toast.LENGTH_SHORT).show()
+//                                Log.e("AdMobAds", "Interstitial failed: $error")
+//                            }
+//                        )
+//                    },
+//                    onFailed = { error ->
+//                        Log.e("AdMobAds", "Interstitial failed to load: $error")
+//                        Toast.makeText(context, "Interstitial failed to load: $error", Toast.LENGTH_SHORT).show()
+//                    }
+//                )
+//            },
+//            onFailed = { error ->
+//                Log.e("AdMobAds", "AdMob failed to initialize: $error")
+//                Toast.makeText(context, "AdMob failed to initialize: $error", Toast.LENGTH_SHORT).show()
+//            }
+//        )
     }
 
     // Apply cooldown configuration only when it changes.
     LaunchedEffect(interstitialCooldown) {
-        AdManager.setCooldown(
+        AdMob.setCooldown(
             key = INTERSTITIAL_COOLDOWN_KEY,
             cooldown = interstitialCooldown.toPolicy()
         )
     }
 
     LaunchedEffect(rewardedCooldown) {
-        AdManager.setCooldown(
+        AdMob.setCooldown(
             key = REWARDED_COOLDOWN_KEY,
             cooldown = rewardedCooldown.toPolicy()
         )
@@ -150,7 +200,7 @@ fun AdManagerDemoScreen() {
     // Premium is an entitlement simulation, not a new initialization.
     LaunchedEffect(isPremium, isInitialized) {
         if (isInitialized) {
-            AdManager.setPremiumMode(isPremium)
+            AdMob.setPremiumMode(isPremium)
 
             statusMessage = if (isPremium) {
                 "Premium enabled. Ads are disabled."
@@ -164,16 +214,16 @@ fun AdManagerDemoScreen() {
     LaunchedEffect(isInitialized) {
         while (isInitialized) {
             interstitialRemaining =
-                AdManager.getCooldownRemainingMillis(
+                AdMob.getCooldownRemainingMillis(
                     INTERSTITIAL_COOLDOWN_KEY
                 )
 
             rewardedRemaining =
-                AdManager.getCooldownRemainingMillis(
+                AdMob.getCooldownRemainingMillis(
                     REWARDED_COOLDOWN_KEY
                 )
 
-            delay(1000L)
+            delay(1000L.milliseconds)
         }
     }
 
@@ -187,9 +237,8 @@ fun AdManagerDemoScreen() {
         context
     ) {
         if (isInitialized && !isPremium) {
-            AdManager.getBannerAdView(
+            AdMob.getBannerAdView(
                 context = context,
-                adWidth = adWidth
             )
         } else {
             null
@@ -209,7 +258,7 @@ fun AdManagerDemoScreen() {
                 title = {
                     Column {
                         Text(
-                            text = "MFA-AdManager",
+                            text = "MFA-AdMob",
                             fontWeight = FontWeight.Bold
                         )
 
@@ -303,7 +352,7 @@ fun AdManagerDemoScreen() {
                     } else {
                         statusMessage = "Requesting interstitial ad..."
 
-                        AdManager.showInterstitial(
+                        AdMob.showInterstitial(
                             activity = currentActivity,
                             cooldownKey = INTERSTITIAL_COOLDOWN_KEY,
                             onSuccess = {
@@ -341,7 +390,7 @@ fun AdManagerDemoScreen() {
                     } else {
                         statusMessage = "Requesting rewarded ad..."
 
-                        AdManager.showRewarded(
+                        AdMob.showRewarded(
                             activity = currentActivity,
                             cooldownKey = REWARDED_COOLDOWN_KEY,
                             onDismiss = { reward ->
@@ -578,7 +627,7 @@ private fun BannerDemo(
 
                 !isInitialized -> {
                     BannerPlaceholder(
-                        message = "Waiting for AdManager initialization..."
+                        message = "Waiting for AdMob initialization..."
                     )
                 }
 
@@ -723,7 +772,6 @@ private fun StatusCard(
 @Composable
 private fun rememberAdWidth(): Int {
     val configuration = LocalConfiguration.current
-
     // AdSize's inline adaptive width is expressed in dp.
     return (configuration.screenWidthDp - 32).coerceAtLeast(1)
 }

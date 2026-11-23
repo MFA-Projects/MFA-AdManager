@@ -36,8 +36,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":library"))
-//    implementation("com.github.MFA-Projects:MFA-AdManager:1.0.1")
+    implementation(project(":Admob"))
+    implementation(project(":Unity"))
+    implementation("com.google.ads.mediation:unity:4.21.0.0")
+//    implementation("com.github.MFA-Projects:MFA-AdManager:1.0.2")
+    implementation("com.github.MFA-Projects:NetworkMonitor:1.0.1")
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
